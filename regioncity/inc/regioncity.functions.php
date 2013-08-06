@@ -36,8 +36,8 @@ function rec_select_location($counName = 'country', $regName = 'region', $cityNa
         'id' => "rec_country_{$elmCnt}",
         'class' => "rec_country"
     );
-    if (!empty($cfg['plugin']['regioncity']['countriesfilter']) && $cfg['plugin']['locationselector']['countriesfilter'] != 'all') {
-        $countriesfilter = str_replace(' ', '', $cfg['plugin']['locationselector']['countriesfilter']);
+    if (!empty($cfg['plugin']['regioncity']['countriesfilter']) && $cfg['plugin']['regioncity']['countriesfilter'] != 'all') {
+        $countriesfilter = str_replace(' ', '', $cfg['plugin']['regioncity']['countriesfilter']);
         $countriesfilter = explode(',', $countriesfilter);
         if(count($countriesfilter) == 1) $attr['disabled'] = 'disabled';
         $country = (count($countriesfilter) == 1) ? $countriesfilter[0] : $country;
