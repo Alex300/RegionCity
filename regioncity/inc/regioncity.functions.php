@@ -34,7 +34,7 @@ function rec_select_location($counName = 'country', $regName = 'region', $cityNa
     $countriesfilter = array();
     $attr = array(
         'id' => "rec_country_{$elmCnt}",
-        'class' => "rec_country"
+        'class' => "rec_country form-control"
     );
     if (!empty($cfg['plugin']['regioncity']['countriesfilter']) && $cfg['plugin']['regioncity']['countriesfilter'] != 'all') {
         $countriesfilter = str_replace(' ', '', $cfg['plugin']['regioncity']['countriesfilter']);
@@ -54,11 +54,11 @@ function rec_select_location($counName = 'country', $regName = 'region', $cityNa
     $regions = array(0 => $L['select_region']) + $regions;
     $attr = array(
         'id' => "rec_region_{$elmCnt}",
-        'class' => "rec_region"
+        'class' => "rec_region form-control"
     );
     if(empty($country) || count($regions) < 2) $attr['disabled'] = 'disabled';
-    // 1-ый хидден, чтобы отправить 0 если сам selectbox станет disable
-    $region_selectbox = cot_inputbox('hidden', $regName[0], 0);
+    // 1-ый хидден, чтобы отправить 0 если сам selectbox станет disable. без вывода ошибок
+    $region_selectbox = '<input type="hidden" name="'.$regName[0].'" value="0" />';
     $region_selectbox .= cot_selectbox($region, $regName[0], array_keys($regions), array_values($regions),
         false, $attr);
     $val = ($region > 0) ? $regions[$region] : '';
@@ -69,11 +69,11 @@ function rec_select_location($counName = 'country', $regName = 'region', $cityNa
     $cities = array(0 => $L['select_city']) + $cities;
     $attr = array(
         'id' => "rec_city_{$elmCnt}",
-        'class' => "rec_city"
+        'class' => "rec_city form-control"
     );
     if(empty($region) || count($cities) < 2) $attr['disabled'] = 'disabled';
     // 1-ый хидден, чтобы отправить 0 если сам selectbox станет disable
-    $city_selectbox = cot_inputbox('hidden', $cityName[0], 0);
+    $city_selectbox = '<input type="hidden" name="'.$cityName[0].'" value="0" />';
     $city_selectbox .= cot_selectbox($city, $cityName[0], array_keys($cities), array_values($cities),
         false, $attr);
     $val = ($city > 0) ? $cities[$city] : '';
