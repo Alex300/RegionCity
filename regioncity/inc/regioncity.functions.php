@@ -15,8 +15,22 @@ require_once cot_incfile('forms');
 require_once "{$cfg['plugins_dir']}/regioncity/model/Region.php";
 require_once "{$cfg['plugins_dir']}/regioncity/model/City.php";
 
+/**
+ * Виджет выбора региона/города
+ *
+ * @param string|array $counName
+ * @param string|array $regName
+ * @param string|array $cityName
+ * @param string $country
+ * @param int $region
+ * @param int $city
+ * @param bool $sendNames - Передавать в запрос названия Страны, региона, города
+ * @param bool $fallback  - Передавать в запрос значение '0', если выбор региона/города - disabled?
+ *
+ * @return array
+ */
 function rec_select_location($counName = 'country', $regName = 'region', $cityName = 'city',
-                    $country = '', $region = 0, $city = 0){
+                    $country = '', $region = 0, $city = 0, $sendNames = true, $fallback = true){
 
     global $cfg, $L, $R;
 
@@ -57,12 +71,13 @@ function rec_select_location($counName = 'country', $regName = 'region', $cityNa
         'class' => "rec_region form-control"
     );
     if(empty($country) || count($regions) < 2) $attr['disabled'] = 'disabled';
+    $region_selectbox = '';
     // 1-ый хидден, чтобы отправить 0 если сам selectbox станет disable. без вывода ошибок
-    $region_selectbox = '<input type="hidden" name="'.$regName[0].'" value="0" />';
+    if($fallback) $region_selectbox = '<input type="hidden" name="'.$regName[0].'" value="0" />';
     $region_selectbox .= cot_selectbox($region, $regName[0], array_keys($regions), array_values($regions),
         false, $attr);
     $val = ($region > 0) ? $regions[$region] : '';
-    $region_selectbox .= cot_inputbox('hidden', $regName[0].'_name', $val, array('id' => "rec_region_{$elmCnt}_name"));
+    if($sendNames) $region_selectbox .= cot_inputbox('hidden', $regName[0].'_name', $val, array('id' => "rec_region_{$elmCnt}_name"));
 
     $city = ($region == 0 || count($regions) < 2) ? 0 : $city;
     $cities = (!empty($region)) ? City::getKeyValPairsByRegion($region) : array();
@@ -72,12 +87,13 @@ function rec_select_location($counName = 'country', $regName = 'region', $cityNa
         'class' => "rec_city form-control"
     );
     if(empty($region) || count($cities) < 2) $attr['disabled'] = 'disabled';
+    $city_selectbox = '';
     // 1-ый хидден, чтобы отправить 0 если сам selectbox станет disable
-    $city_selectbox = '<input type="hidden" name="'.$cityName[0].'" value="0" />';
+    if($fallback) $city_selectbox .= '<input type="hidden" name="'.$cityName[0].'" value="0" />';
     $city_selectbox .= cot_selectbox($city, $cityName[0], array_keys($cities), array_values($cities),
         false, $attr);
     $val = ($city > 0) ? $cities[$city] : '';
-    $city_selectbox .= cot_inputbox('hidden', $cityName[0].'_name' ,$val, array('id' => "rec_city_{$elmCnt}_name"));
+    if($sendNames) $city_selectbox .= cot_inputbox('hidden', $cityName[0].'_name' ,$val, array('id' => "rec_city_{$elmCnt}_name"));
 
     $result = array(
         $counName[1] => $country_selectbox,
