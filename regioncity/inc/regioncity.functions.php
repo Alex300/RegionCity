@@ -12,12 +12,8 @@ $db_rec_region = (isset($db_rec_region)) ? $db_rec_region : $db_x . 'region';
 $db_rec_city = (isset($db_rec_city)) ? $db_rec_city : $db_x . 'city';
 
 require_once cot_incfile('forms');
-//require_once "{$cfg['plugins_dir']}/regioncity/model/Region.php";
-//require_once "{$cfg['plugins_dir']}/regioncity/model/City.php";
-
-// Автозагрузка
-require_once 'lib/Loader.php';
-Loader::register();
+require_once "{$cfg['plugins_dir']}/regioncity/model/Region.php";
+require_once "{$cfg['plugins_dir']}/regioncity/model/City.php";
 
 /**
  * Виджет выбора региона/города
@@ -68,7 +64,7 @@ function rec_select_location($counName = 'country', $regName = 'region', $cityNa
     $country_selectbox .= (count($countriesfilter) == 1) ? cot_inputbox('hidden', $counName[0], $country) : '';
 
     $region = ($country == '' || count($countries) < 2) ? 0 : $region;
-    $regions = (!empty($country)) ? regioncity_model_Region::getKeyValPairsByCountry($country) : array();
+    $regions = (!empty($country)) ? Region::getKeyValPairsByCountry($country) : array();
     $regions = array(0 => $L['select_region']) + $regions;
     $attr = array(
         'id' => "rec_region_{$elmCnt}",
@@ -84,7 +80,7 @@ function rec_select_location($counName = 'country', $regName = 'region', $cityNa
     if($sendNames) $region_selectbox .= cot_inputbox('hidden', $regName[0].'_name', $val, array('id' => "rec_region_{$elmCnt}_name"));
 
     $city = ($region == 0 || count($regions) < 2) ? 0 : $city;
-    $cities = (!empty($region)) ? regioncity_model_City::getKeyValPairsByRegion($region) : array();
+    $cities = (!empty($region)) ? City::getKeyValPairsByRegion($region) : array();
     $cities = array(0 => $L['select_city']) + $cities;
     $attr = array(
         'id' => "rec_city_{$elmCnt}",
