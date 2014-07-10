@@ -23,7 +23,7 @@ class CityController{
 
         $rid = cot_import('rid', 'G', 'INT');
 
-        $region = Region::getById($rid);
+        $region = regioncity_model_Region::getById($rid);
         if(!$region){
             cot_error('Region not found');
         }
@@ -37,11 +37,11 @@ class CityController{
 
         list($pn, $d, $d_url) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 
-        $totalitems = City::count($cond);
+        $totalitems = regioncity_model_City::count($cond);
         $pagenav = cot_pagenav('admin', "m=other&p=regioncity&n=city&rid=" . $rid, $d, $totalitems, $cfg['maxrowsperpage']);
 
-        $cities = City::find($cond, $cfg['maxrowsperpage'], $d, 'city_title ASC');
-        $regionsArr = Region::getKeyValPairsByCountry($region->region_country);
+        $cities = regioncity_model_City::find($cond, $cfg['maxrowsperpage'], $d, 'city_title ASC');
+        $regionsArr = regioncity_model_Region::getKeyValPairsByCountry($region->region_country);
 
 
         $t = new XTemplate(cot_tplfile('regioncity.city', 'plug'));
@@ -102,7 +102,7 @@ class CityController{
 
         if (count($rnames) > 0){
 
-            $region = Region::getById($rid);
+            $region = regioncity_model_Region::getById($rid);
             if(!$region){
                 cot_error('Region not found');
                 return false;
@@ -132,7 +132,7 @@ class CityController{
         list($pn, $d, $d_url) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 
         $cid = cot_import('cid', 'G', 'INT');
-        $city = City::getById($cid);
+        $city = regioncity_model_City::getById($cid);
 
         $rid = $city->city_region;
         $title = $city->city_title;

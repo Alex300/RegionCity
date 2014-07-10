@@ -1,53 +1,40 @@
 <?php
 defined('COT_CODE') or die('Wrong URL.');
-require_once "{$cfg['plugins_dir']}/regioncity/model/RecModelAbstract.php";
+
 /**
  * Model class for the Region
  *
  * @package Region City
  * @subpackage Region
  * @author Alex - Studio Portal30
- * @copyright Portal30 2013 http://portal30.ru
+ * @copyright Portal30 http://portal30.ru
+ *
+ * @method static regioncity_model_Region getById($pk);
+ * @method static regioncity_model_Region fetchOne($conditions = array(), $order = '');
+ * @method static regioncity_model_Region[] find($conditions = array(), $limit = 0, $offset = 0, $order = '');
  *
  * @property int $region_id;
  * @property string $region_country
  * @property string $region_title
- *
- * @method static Region getById(int $pk)
- * @method static Region[] getList(int $limit = 0, int $offset = 0, string $order = '')
- * @method static Region[] find(mixed $conditions, int $limit = 0, int $offset = 0, string $order = '')
- *
  */
-class Region extends RecModelAbstract{
+class regioncity_model_Region extends Som_Model_Abstract{
 
-    /**
-     * @var string
-     */
-    public static $_table_name = '';
-
-    /**
-     * @var string
-     */
-    public static $_primary_key = '';
-
-    /**
-     * Column definitions
-     * @var array
-     */
-    public static $_columns = array();
+    /** @var Som_Model_Mapper_Abstract $db */
+    protected static $_db = null;
+    protected static $_columns = null;
+    protected static $_tbname = '';
+    protected static $_primary_key = 'region_id';
 
     public $owner = array();
 
     /**
      * Static constructor
      */
-    public static function __init(){
+    public static function __init($db = 'db'){
         global $db_rec_region;
 
-        self::$_table_name = $db_rec_region;
-        self::$_primary_key = 'region_id';
-        parent::__init();
-
+        static::$_tbname = $db_rec_region;
+        parent::__init($db);
     }
 
     /**
@@ -56,8 +43,6 @@ class Region extends RecModelAbstract{
      * @return array
      */
     public static function getKeyValPairsByCountry($country = '') {
-        global $db, $db_rec_region;
-
         $key = $country = trim($country);
         if ($key == '') $key = '_all_';
 
@@ -66,16 +51,42 @@ class Region extends RecModelAbstract{
             return $_stCache[$key];
         }
 
-        $q = "SELECT region_id, region_title FROM `$db_rec_region`
+        $q = "SELECT region_id, region_title FROM ".static::$_db->quoteIdentifier(static::$_tbname)."
             WHERE `region_country`=? ORDER BY `region_title` ASC";
-        $sql = $db->query($q, array($country));
+        $sql = static::$_db->query($q, array($country));
 
         $_stCache[$key] = $sql->fetchAll(PDO::FETCH_KEY_PAIR);
 
         return $_stCache[$key];
     }
 
+    public static function fieldList()
+    {
+        return array(
+            'region_id' =>
+                array(
+                    'name' => 'region_id',
+                    'type' => 'int',
+                    'primary' => true,
+                ),
+            'region_country' =>
+                array(
+                    'name' => 'region_country',
+                    'type' => 'varchar',
+                    'length' => 3,
+                    'nullable' => false,
+                ),
+            'region_title' =>
+                array(
+                    'name' => 'region_title',
+                    'type' => 'varchar',
+                    'length' => 255,
+                    'nullable' => false,
+                ),
+        );
+    }
+
 }
 
 // Class initialization for some static variables
-Region::__init();
+regioncity_model_Region::__init();

@@ -26,10 +26,10 @@ class RegionController{
 
         list($pn, $d, $d_url) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 
-        $totalitems = Region::count($cond);
+        $totalitems = regioncity_model_Region::count($cond);
         $pagenav = cot_pagenav('admin', "m=other&p=regioncity&n=region&country=" . $country, $d, $totalitems, $cfg['maxrowsperpage']);
 
-        $regions = Region::find($cond, $cfg['maxrowsperpage'], $d, 'region_title ASC');
+        $regions = regioncity_model_Region::find($cond, $cfg['maxrowsperpage'], $d, 'region_title ASC');
 
         $t = new XTemplate(cot_tplfile('regioncity.region', 'plug'));
         $cnt = 0;
@@ -90,7 +90,7 @@ class RegionController{
         }
 
         if(!cot_error_found()){
-            $region = new Region();
+            $region = new regioncity_model_Region();
             $region->region_title = $title;
             $region->region_country = $country;
             $region->save();
@@ -112,7 +112,7 @@ class RegionController{
         $country = cot_import('country', 'G', 'TXT');
         $rid = cot_import('rid', 'G', 'INT');
 
-        $region = Region::getById($rid);
+        $region = regioncity_model_Region::getById($rid);
         if(empty($country)) $country = $region->region_country;
 
         $db->delete($db_rec_region, "region_id=" . (int)$rid);
@@ -153,6 +153,5 @@ class RegionController{
         $cache && $cache->clear();
         cot_redirect(cot_url('admin', 'm=other&p=regioncity&n=region&country=' . $country . '&d=' . $d_url, '', true));
         exit;
-
     }
 }

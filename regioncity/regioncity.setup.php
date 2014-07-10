@@ -4,10 +4,10 @@
 Code=regioncity
 Name=Region City
 Description=Редактор/Селектор стран, регионов, городов
-Version=1.0.0
-Date=15 Febreury 2013
+Version=1.0.1
+Date=10 July 2014
 Author=Yusupov, esclkm, Alex
-Copyright=2013 Portal30 http://portal30.ru
+Copyright=2013-2014 Portal30 http://portal30.ru
 Notes=
 Auth_guests=R
 Lock_guests=W12345A
@@ -29,6 +29,6 @@ page_city=20:string:::Page city fields
  *
  * @package Region City
  * @author Yusupov, esclkm, Alex - Studio Portal30
- * @copyright Portal30 2013 http://portal30.ru
+ * @copyright Portal30 2013-2014 http://portal30.ru
  */
 defined('COT_CODE') or die('Wrong URL.');

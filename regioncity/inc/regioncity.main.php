@@ -31,7 +31,7 @@ class MainController{
 
         $regions = array();
         if ($country != '0'){
-            $regions = Region::getKeyValPairsByCountry($country);
+            $regions = regioncity_model_Region::getKeyValPairsByCountry($country);
         }
 
         $ret = array(
@@ -53,7 +53,7 @@ class MainController{
 
         $cities = array();
         if ($region){
-            $cities = City::getKeyValPairsByRegion($region);
+            $cities = regioncity_model_City::getKeyValPairsByRegion($region);
         }
 
         $ret = array(
