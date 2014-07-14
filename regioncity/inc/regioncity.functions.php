@@ -12,8 +12,10 @@ $db_rec_region = (isset($db_rec_region)) ? $db_rec_region : $db_x . 'region';
 $db_rec_city = (isset($db_rec_city)) ? $db_rec_city : $db_x . 'city';
 
 require_once cot_incfile('forms');
-require_once "{$cfg['plugins_dir']}/regioncity/model/Region.php";
-require_once "{$cfg['plugins_dir']}/regioncity/model/City.php";
+
+// Автозагрузка
+require_once 'lib/Loader.php';
+Loader::register();
 
 /**
  * Виджет выбора региона/города
@@ -64,7 +66,7 @@ function rec_select_location($counName = 'country', $regName = 'region', $cityNa
     $country_selectbox .= (count($countriesfilter) == 1) ? cot_inputbox('hidden', $counName[0], $country) : '';
 
     $region = ($country == '' || count($countries) < 2) ? 0 : $region;
-    $regions = (!empty($country)) ? Region::getKeyValPairsByCountry($country) : array();
+    $regions = (!empty($country)) ? regioncity_model_Region::getKeyValPairsByCountry($country) : array();
     $regions = array(0 => $L['select_region']) + $regions;
     $attr = array(
         'id' => "rec_region_{$elmCnt}",
@@ -80,7 +82,7 @@ function rec_select_location($counName = 'country', $regName = 'region', $cityNa
     if($sendNames) $region_selectbox .= cot_inputbox('hidden', $regName[0].'_name', $val, array('id' => "rec_region_{$elmCnt}_name"));
 
     $city = ($region == 0 || count($regions) < 2) ? 0 : $city;
-    $cities = (!empty($region)) ? City::getKeyValPairsByRegion($region) : array();
+    $cities = (!empty($region)) ? regioncity_model_City::getKeyValPairsByRegion($region) : array();
     $cities = array(0 => $L['select_city']) + $cities;
     $attr = array(
         'id' => "rec_city_{$elmCnt}",
@@ -109,4 +111,100 @@ function rec_select_location($counName = 'country', $regName = 'region', $cityNa
     }
 
     return $result;
+}
+
+/**
+ * Renders a Select2 city dropdown
+ *
+ * Select2 must be installed on your site
+ * @see http://ivaynberg.github.io/select2/
+ *
+ * @param string $name Dropdown name
+ * @param int array|int $chosen Seleced value (or values array for mutli-select)
+ * @param bool $add_empty Allow empty choice
+ * @param mixed $attrs Additional attributes as an associative array or a string
+ * @param string $custom_rc Custom resource string name
+ * @return string
+ */
+function rec_select2_city($name, $chosen = 0, $add_empty = true, $attrs = array(), $custom_rc = '' ){
+
+    //$input_attrs = cot_rc_attr_string($attrs);
+    $chosen = cot_import_buffered($name, $chosen);
+//    $multi = is_array($chosen) && (mb_strpos($input_attrs, 'multiple') !== false);
+
+    $params = '';
+    if(empty($attrs['placeholder'])){
+        if (!empty($attrs['multiple'])){
+            $attrs['placeholder'] = 'Кликните для выбора';
+        }else{
+            $attrs['placeholder'] = 'Пожалуйста выберите';
+        }
+    }
+
+    if($add_empty){
+        $attrs['allowClear'] = 'true';
+    }
+
+    foreach ($attrs as $k => $v) {
+        if (is_string($v) || is_bool($v)) {
+            if ($k == 'multiple') {
+                $v = 'true';
+            }
+            $params .= '"' . $k . '":"' . $v . '",';
+        }
+    }
+
+    if (!empty($attrs['class'])) {
+        if (mb_strpos($attrs['class'], 'form-control') === false)
+            $attrs['class'] .= ' form-control';
+    } else {
+        $attrs['class'] = 'form-control';
+    }
+
+    $chosenName = '';
+    if (is_array($chosen) && (null !== current($chosen)) && current($chosen) instanceof Som_Model_Abstract) {
+        // реализуй меня ))
+//            foreach ($choosen as $Model) {
+//
+//            }
+//            $values = $valuesToInput;
+    } else {
+        if (is_int($chosen) || ctype_digit($chosen)){
+            $chosen = regioncity_model_City::getById($chosen);
+        }
+
+        if ($chosen instanceof regioncity_model_City) {
+            $vrValues[] = array(
+                'id'   => $chosen->city_id,
+                'text' => $chosen->city_title,
+                $chosenName = $chosen->city_title
+            );
+        }
+    }
+
+    if(empty($attrs['id'])) $attrs['id'] = str_replace(array('[]','][','[',']',' '), array('','_','_','','_'), $name);
+
+    $attrs['data-params'] =
+        '{
+             "params":{
+                '.$params.'
+                "minimumInputLength": 2,
+                "quietMillis": 100
+             },
+             "initSelection":' . (isset($options['multiple']) ? json_encode($vrValues) :
+                                     (empty($vrValues) ? 'null' : json_encode($vrValues[0]))) . '
+        }';
+
+
+    if(!defined('REGION_CITY_JS')){
+        cot_rc_link_footer(cot::$cfg['plugins_dir'].'/regioncity/js/regioncity.js');
+        define('REGION_CITY_JS', 1);
+    }
+
+    cot_rc_embed_footer("
+        $('#{$attrs['id']}').select2City();
+    ");
+
+    return cot_inputbox('hidden', $name, '', $attrs).cot_inputbox('hidden', $name.'_name' ,$chosenName,
+        array('id' => "{$attrs['id']}_name"));
 }

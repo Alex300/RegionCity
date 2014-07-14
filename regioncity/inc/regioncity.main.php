@@ -66,6 +66,30 @@ class MainController{
     }
 
     /**
+     * Получить список городов по первой букве
+     */
+    public function ajxSuggestCityAction(){
+        $v = cot_import('q', 'G', 'TXT');
+        $page = cot_import('page', 'G', 'INT');
+        $limit = cot_import('page_limit', 'G', 'INT');
+
+        $list = regioncity_model_City::find(array(array('city_title', '*'.$v.'*')), 10, ($page - 1) * $limit);
+        $mOut = array();
+        $mOut['total'] = regioncity_model_City::count(array(array('city_title', '*'.$v.'*')));
+        if (!empty($list))
+            foreach ($list as $MCity) $mOut['data'][] = array(
+                'id' => $MCity->city_id,
+                'text' => $MCity->city_title
+            );
+        else {
+            $mOut['data'] = array();
+        }
+
+        echo json_encode($mOut);
+        exit();
+    }
+
+    /**
      * Временно. Убрать. Конвертер
      */
     public function convertAction(){

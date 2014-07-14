@@ -6,6 +6,83 @@
  * @copyright Portal30 2013 http://portal30.ru
  */
 
+
+(function( $ ){
+
+    var methods = {
+        init : function( options ) {
+            'use strict';
+
+            return this.each(function(options){
+
+                var $this = $(this);
+                var element_data = $this.data('params');
+                var params = element_data.params;
+                params.initSelection =
+                    function (element, callback) {
+                        callback(element_data.initSelection);
+                    }
+
+                params.ajax = {
+                    url: element_data.ajax_url || "index.php?e=regioncity&a=ajxSuggestCity",
+                    dataType: 'json',
+
+                    data: function (term, page) {
+                        return {
+                            q: term,
+                            page_limit: 10,
+                            page: page
+                        };
+                    },
+                    results: function (data, page) {
+                        var more = (page * 10) < data.total;
+                        return {results: data.data, more: more};
+                    }
+                }
+
+                $this.select2(params);
+                $this.select2('val', [
+                    {id: null, text: null}
+                ]);
+
+                $($this).on("change", function(e) {
+                    var id = $(this).attr('id');
+                    var val = e.val;
+
+                    if(val == ''){
+                        $('#'+ id +'_name').val('');
+                    }else{
+                        $('#'+ id +'_name').val(e.added.text);
+                    }
+                })
+
+            });
+        }
+    };
+
+    /**
+     * Renders a Select2 city dropdown
+     *
+     * Select2 must be installed on your site
+     * @see http://ivaynberg.github.io/select2/
+     *
+     * @param method
+     * @returns {*}
+     */
+    $.fn.select2City = function( method ) {
+        'use strict';
+
+        // логика вызова метода
+        if ( methods[method] ) {
+            return methods[ method ].apply( this, Array.prototype.slice.call( arguments, 1 ));
+        } else if ( typeof method === 'object' || ! method ) {
+            return methods.init.apply( this, arguments );
+        } else {
+            $.error( 'Метод с именем ' +  method + ' не существует для jQuery.select2City' );
+        }
+    };
+})( jQuery );
+
 $(document).on("change", ".rec_country", function(){
     var parent = $(this).parent();
     var id = $(this).attr('id');
