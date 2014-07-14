@@ -4,7 +4,7 @@
  *
  * @package Region City
  * @author Alex - Studio Portal30
- * @copyright Portal30 2013 http://portal30.ru
+ * @copyright Portal30 http://portal30.ru
  */
 defined('COT_CODE') or die('Wrong URL.');
 
