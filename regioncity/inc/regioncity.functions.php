@@ -135,9 +135,9 @@ function rec_select2_city($name, $chosen = 0, $add_empty = true, $attrs = array(
     $params = '';
     if(empty($attrs['placeholder'])){
         if (!empty($attrs['multiple'])){
-            $attrs['placeholder'] = 'Кликните для выбора';
+            $attrs['placeholder'] = cot::$L['rec_click_to_select'];
         }else{
-            $attrs['placeholder'] = 'Пожалуйста выберите';
+            $attrs['placeholder'] = cot::$L['rec_please_select'];
         }
     }
 

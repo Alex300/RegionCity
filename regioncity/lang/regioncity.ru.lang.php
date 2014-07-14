@@ -30,3 +30,6 @@ $L['rec_newcity_list'] = 'Укажите список городов';
 $L['select_country'] = 'Выберите страну';
 $L['select_region'] = 'Выберите регион';
 $L['select_city'] = 'Выберите город';
+
+$L['rec_click_to_select'] = 'Кликните для выбора';
+$L['rec_please_select'] = 'Пожалуйста выберите';
