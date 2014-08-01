@@ -120,7 +120,7 @@ function rec_select_location($counName = 'country', $regName = 'region', $cityNa
  * @see http://ivaynberg.github.io/select2/
  *
  * @param string $name Dropdown name
- * @param int array|int $chosen Seleced value (or values array for mutli-select)
+ * @param array|int $chosen Seleced value (or values array for mutli-select)
  * @param bool $add_empty Allow empty choice
  * @param mixed $attrs Additional attributes as an associative array or a string
  * @param string $custom_rc Custom resource string name
@@ -162,12 +162,21 @@ function rec_select2_city($name, $chosen = 0, $add_empty = true, $attrs = array(
     }
 
     $chosenName = '';
+    $vrValues = array();
     if (is_array($chosen) && (null !== current($chosen)) && current($chosen) instanceof Som_Model_Abstract) {
-        // реализуй меня ))
-//            foreach ($choosen as $Model) {
-//
-//            }
-//            $values = $valuesToInput;
+        $chosenNames = array();
+        foreach ($chosen as $city) {
+            if ($city instanceof regioncity_model_City) {
+                $vrValues[] = array(
+                    'id'   => $city->city_id,
+                    'text' => $city->city_title,
+                    $chosenNames[] = $city->city_title
+                );
+            }else{
+                // todo
+            }
+        }
+        $chosenName = implode(',', $chosenNames);
     } else {
         if (is_int($chosen) || ctype_digit($chosen)){
             $chosen = regioncity_model_City::getById($chosen);
@@ -191,7 +200,7 @@ function rec_select2_city($name, $chosen = 0, $add_empty = true, $attrs = array(
                 "minimumInputLength": 2,
                 "quietMillis": 100
              },
-             "initSelection":' . (isset($options['multiple']) ? json_encode($vrValues) :
+             "initSelection":' . (isset($attrs['multiple']) ? json_encode($vrValues) :
                                      (empty($vrValues) ? 'null' : json_encode($vrValues[0]))) . '
         }';
 
