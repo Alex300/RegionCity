@@ -146,6 +146,7 @@ function rec_select2_city($name, $chosen = 0, $add_empty = true, $attrs = array(
     }
 
     foreach ($attrs as $k => $v) {
+        if($k == 'id') continue;
         if (is_string($v) || is_bool($v)) {
             if ($k == 'multiple') {
                 $v = 'true';
