@@ -215,6 +215,8 @@ function rec_select2_city($name, $chosen = 0, $add_empty = true, $attrs = array(
         $('#{$attrs['id']}').select2City();
     ");
 
-    return cot_inputbox('hidden', $name, '', $attrs).cot_inputbox('hidden', $name.'_name' ,$chosenName,
-        array('id' => "{$attrs['id']}_name"));
+    $hidden = '';
+    if(mb_strpos($name, '[') === false) $hidden = cot_inputbox('hidden', $name.'_name' ,$chosenName, array('id' => "{$attrs['id']}_name"));
+
+    return cot_inputbox('hidden', $name, '', $attrs).$hidden;
 }
