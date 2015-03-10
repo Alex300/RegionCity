@@ -15,7 +15,7 @@ class CityController{
      * Main (index) Action.
      */
     public function indexAction(){
-        global $adminpath, $cot_countries, $L, $cfg;
+        global $adminpath, $admintitle, $adminsubtitle, $cot_countries, $L, $cfg;
 
         $country = cot_import('country', 'G', 'TXT');
 
@@ -33,6 +33,8 @@ class CityController{
 
         $country = $region->region_country;
 
+        $admintitle = $adminsubtitle  = $region->region_title.' ('.$cot_countries[$country].')';
+
         $cond = array(array('city_region', $rid));
 
         list($pn, $d, $d_url) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
@@ -44,12 +46,11 @@ class CityController{
         $regionsArr = regioncity_model_Region::getKeyValPairsByCountry($region->region_country);
 
 
-        $t = new XTemplate(cot_tplfile('regioncity.city', 'plug'));
+        $t = new XTemplate(cot_tplfile('regioncity.admin.city', 'plug', true));
         $cnt = 0;
         if($cities){
             foreach($cities as $item){
                 $cnt++;
-
                 $t->assign(array(
                     "CITY_ROW_NAME" => cot_inputbox('text', 'rname[' . $item->city_id . ']', $item->city_title),
                     "CITY_ROW_REGION" => cot_selectbox($item->city_region, "rregion[{$item->city_id}]", array_keys($regionsArr),
@@ -73,10 +74,12 @@ class CityController{
         $t->assign(array(
             "EDIT_FORM_ACTION_URL" => cot_url('admin', "m=other&p=regioncity&n=city&rid={$rid}&a=edit&d={$d_url}"),
             "PAGENAV_PAGES" => $pagenav['main'],
-            "PAGENAV_PREV" => $pagenav['prev'],
-            "PAGENAV_NEXT" => $pagenav['next'],
-            "COUNTRY_NAME" => $cot_countries[$country],
-            "REGION_NAME" => $region->region_title
+            "PAGENAV_PREV"  => $pagenav['prev'],
+            "PAGENAV_NEXT"  => $pagenav['next'],
+            'TOTALITEMS'    => $totalitems,
+            'ON_PAGE'       => $cnt,
+            "COUNTRY_NAME"  => $cot_countries[$country],
+            "REGION_NAME"   => $region->region_title
         ));
 
         // Error and message handling

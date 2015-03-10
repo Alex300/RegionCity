@@ -15,12 +15,14 @@ class RegionController{
      * Main (index) Action.
      */
     public function indexAction(){
-        global $adminpath, $cot_countries, $L, $cfg;
+        global $adminpath, $admintitle, $adminsubtitle, $cot_countries, $L, $cfg;
 
         $country = cot_import('country', 'G', 'TXT');
 
         $adminpath[] = array(cot_url('admin', 'm=other&p=regioncity'), $L['rec_countries'] );
         $adminpath[] = $cot_countries[$country];
+
+        $admintitle = $adminsubtitle  = $L['rec_regions'].' ('.$cot_countries[$country].')';
 
         $cond = array(array('region_country', $country));
 
@@ -31,12 +33,11 @@ class RegionController{
 
         $regions = regioncity_model_Region::find($cond, $cfg['maxrowsperpage'], $d, 'region_title ASC');
 
-        $t = new XTemplate(cot_tplfile('regioncity.region', 'plug'));
+        $t = new XTemplate(cot_tplfile('regioncity.admin.region', 'plug', true));
         $cnt = 0;
         if($regions){
             foreach($regions as $item){
                 $cnt++;
-
                 $t->assign(array(
                     "REGION_ROW_NAME" => cot_inputbox('text', 'rname[' . $item->region_id . ']', $item->region_title),
                     "REGION_ROW_URL" => cot_url('admin', 'm=other&p=regioncity&n=city&rid=' . $item->region_id),
@@ -58,9 +59,11 @@ class RegionController{
 
         $t->assign(array(
             "EDIT_FORM_ACTION_URL" => cot_url('admin', 'm=other&p=regioncity&n=region&country=' . $country . '&a=edit&d=' . $d_url),
-            "PAGENAV_PAGES" => $pagenav['main'],
             "PAGENAV_PREV" => $pagenav['prev'],
+            "PAGENAV_PAGES" => $pagenav['main'],
             "PAGENAV_NEXT" => $pagenav['next'],
+            'TOTALITEMS' => $totalitems,
+            'ON_PAGE' => $cnt,
             "COUNTRY_NAME" => $cot_countries[$country],
         ));
 

@@ -15,11 +15,12 @@ class CountryController{
      * Main (index) Action.
      */
     public function indexAction(){
-        global $adminpath, $cot_countries, $L;
+        global $adminpath, $admintitle, $adminsubtitle, $cot_countries, $L;
 
         $adminpath[] = $L['rec_countries'];
+        $admintitle = $adminsubtitle  = $L['rec_countries'];
 
-        $t = new XTemplate(cot_tplfile('regioncity.country', 'plug'));
+        $t = new XTemplate(cot_tplfile('regioncity.admin.country', 'plug', true));
         $cnt = 0;
         foreach ($cot_countries as $code => $name){
             $cnt++;
