@@ -18,10 +18,6 @@
                 var $this = $(this);
                 var element_data = $this.data('params');
                 var params = element_data.params;
-                //params.initSelection =
-                //    function (element, callback) {
-                //        callback(element_data.initSelection);
-                //    };
 
                 params.ajax = {
                     url: element_data.ajax_url || "index.php?e=regioncity&a=ajxSuggestCity",
@@ -41,9 +37,6 @@
                 };
 
                 $this.select2(params);
-                //$this.select2('val', [
-                //    {id: null, text: null}
-                //]);
 
                 $($this).on("change", function(e) {
                     var id = $(this).attr('id');
