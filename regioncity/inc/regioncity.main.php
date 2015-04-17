@@ -71,6 +71,7 @@ class MainController{
     public function ajxSuggestCityAction(){
         $v = cot_import('q', 'G', 'TXT');
         $page = cot_import('page', 'G', 'INT');
+        if(!$page) $page = 1;
         $limit = cot_import('page_limit', 'G', 'INT');
 
         $list = regioncity_model_City::find(array(array('city_title', '*'.$v.'*')), 10, ($page - 1) * $limit);
