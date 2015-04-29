@@ -12,12 +12,14 @@
 			<tr>
 				<td class="coltop width60">{PHP.L.Title}</td>
                 <td class="coltop"></td>
+                <td class="coltop"></td>
 				<td class="coltop width20">{PHP.L.Action}</td>
 			</tr>
 			<!-- BEGIN: ROWS -->
 			<tr>
 				<td>{CITY_ROW_NAME} </td>
                 <td>{CITY_ROW_REGION}</td>
+                <td>{CITY_ROW_SORT}</td>
 				<td>
 					<a title="{PHP.L.Delete}" href="{CITY_ROW_DEL_URL}" class="confirmLink negative button"><span class="trash icon"></span>{PHP.L.Delete}</a>
 				</td>

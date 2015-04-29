@@ -74,13 +74,14 @@ class MainController{
         if(!$page) $page = 1;
         $limit = cot_import('page_limit', 'G', 'INT');
 
-        $list = regioncity_model_City::find(array(array('city_title', '*'.$v.'*')), 10, ($page - 1) * $limit);
+        $list = regioncity_model_City::find(array(array('title', '*'.$v.'*')), 10, ($page - 1) * $limit,
+            array(array('sort', 'desc'), array('title', 'asc')));
         $mOut = array();
-        $mOut['total'] = regioncity_model_City::count(array(array('city_title', '*'.$v.'*')));
+        $mOut['total'] = regioncity_model_City::count(array(array('title', '*'.$v.'*')));
         if (!empty($list))
             foreach ($list as $MCity) $mOut['data'][] = array(
-                'id' => $MCity->city_id,
-                'text' => $MCity->city_title
+                'id' => $MCity->id,
+                'text' => $MCity->title
             );
         else {
             $mOut['data'] = array();
@@ -114,17 +115,17 @@ class MainController{
             if ($user['user_city'] == 0){
                 $cond = array();
                 if ($user['user_city_name'] != ''){
-                    $cond[] = array('city_title', $user['user_city_name']);
-                    if ($user['user_country'] != '' && $user['user_country'] != '00') $cond[] = array('city_country', $user['user_country']);
-                    if ($user['user_region'] != 0) $cond[] = array('city_region', $user['user_region']);
+                    $cond[] = array('title', $user['user_city_name']);
+                    if ($user['user_country'] != '' && $user['user_country'] != '00') $cond[] = array('country', $user['user_country']);
+                    if ($user['user_region'] != 0) $cond[] = array('region', $user['user_region']);
                 }
                 if (count($cond) > 0){
                     $tmp = City::find($cond);
                     if ($tmp){
-                        $city = (int)$tmp[0]->city_id;
-                        $region = (int)$tmp[0]->city_region;
+                        $city = (int)$tmp[0]->id;
+                        $region = (int)$tmp[0]->region;
                         if ($user['user_country'] == '' || $user['user_country'] == '00'){
-                            $country = $tmp[0]->city_country;
+                            $country = $tmp[0]->country;
                         }
                     }
                 }
@@ -132,7 +133,7 @@ class MainController{
                 // Получить регион
                 $tmp = City::getById($user['user_city']);
                 if($tmp){
-                    $region = $tmp->city_region;
+                    $region = $tmp->region;
                     $regionFromCity = true;
                 }
             }
@@ -141,15 +142,15 @@ class MainController{
             if ($user['user_region'] == 0 && !$regionFromCity){
                 $cond = array();
                 if ($user['user_region_name'] != ''){
-                    $cond[] = array('region_title', $user['user_region_name']);
-                    if ($user['user_country'] != '' && $user['user_country'] != '00') $cond[] = array('region_country', $user['user_country']);
+                    $cond[] = array('title', $user['user_region_name']);
+                    if ($user['user_country'] != '' && $user['user_country'] != '00') $cond[] = array('country', $user['user_country']);
                 }
                 if (count($cond) > 0){
                     $tmp = Region::find($cond);
                     if ($tmp){
-                        $region = (int)$tmp[0]->region_id;
+                        $region = (int)$tmp[0]->id;
                         if ($user['user_country'] == '' || $user['user_country'] == '00'){
-                            $country = $tmp[0]->region_country;
+                            $country = $tmp[0]->country;
                         }
                     }
                 }

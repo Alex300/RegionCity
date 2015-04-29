@@ -28,22 +28,22 @@ class CityController{
             cot_error('Region not found');
         }
 
-        $adminpath[] = array(cot_url('admin', "m=other&p=regioncity&n=region&country={$region->region_country}"), $cot_countries[$region->region_country] );
-        $adminpath[] = $region->region_title;
+        $adminpath[] = array(cot_url('admin', "m=other&p=regioncity&n=region&country={$region->country}"), $cot_countries[$region->country] );
+        $adminpath[] = $region->title;
 
-        $country = $region->region_country;
+        $country = $region->country;
 
-        $admintitle = $adminsubtitle  = $region->region_title.' ('.$cot_countries[$country].')';
+        $admintitle = $adminsubtitle  = $region->title.' ('.$cot_countries[$country].')';
 
-        $cond = array(array('city_region', $rid));
+        $cond = array(array('region', $rid));
 
         list($pn, $d, $d_url) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 
         $totalitems = regioncity_model_City::count($cond);
         $pagenav = cot_pagenav('admin', "m=other&p=regioncity&n=city&rid=" . $rid, $d, $totalitems, $cfg['maxrowsperpage']);
 
-        $cities = regioncity_model_City::find($cond, $cfg['maxrowsperpage'], $d, 'city_title ASC');
-        $regionsArr = regioncity_model_Region::getKeyValPairsByCountry($region->region_country);
+        $cities = regioncity_model_City::find($cond, $cfg['maxrowsperpage'], $d, array(array('sort', 'DESC'), array('title', 'ASC')));
+        $regionsArr = regioncity_model_Region::getKeyValPairsByCountry($region->country);
 
 
         $t = new XTemplate(cot_tplfile('regioncity.admin.city', 'plug', true));
@@ -52,10 +52,11 @@ class CityController{
             foreach($cities as $item){
                 $cnt++;
                 $t->assign(array(
-                    "CITY_ROW_NAME" => cot_inputbox('text', 'rname[' . $item->city_id . ']', $item->city_title),
-                    "CITY_ROW_REGION" => cot_selectbox($item->city_region, "rregion[{$item->city_id}]", array_keys($regionsArr),
+                    "CITY_ROW_NAME" => cot_inputbox('text', 'rname[' . $item->id . ']', $item->title),
+                    "CITY_ROW_REGION" => cot_selectbox($item->region, "rregion[{$item->id}]", array_keys($regionsArr),
                         array_values($regionsArr), false),
-                    "CITY_ROW_DEL_URL" => cot_confirm_url(cot_url('admin', 'm=other&p=regioncity&n=city&a=del&cid=' . $item->city_id), 'regioncity'),
+                    "CITY_ROW_DEL_URL" => cot_confirm_url(cot_url('admin', 'm=other&p=regioncity&n=city&a=del&cid=' . $item->id), 'regioncity'),
+                    "CITY_ROW_SORT" => cot_inputbox('text', 'rsort[' . $item->id . ']', $item->sort),
                     "CITY_ROW_NUM" => $cnt,
                     "CITY_ROW_ODDEVEN" => cot_build_oddeven($cnt)
                 ));
@@ -79,7 +80,7 @@ class CityController{
             'TOTALITEMS'    => $totalitems,
             'ON_PAGE'       => $cnt,
             "COUNTRY_NAME"  => $cot_countries[$country],
-            "REGION_NAME"   => $region->region_title
+            "REGION_NAME"   => $region->title
         ));
 
         // Error and message handling
@@ -113,11 +114,11 @@ class CityController{
             foreach ($rnames as $rname){
                 if (!empty($rname)){
                     $rinput = array();
-                    $rinput['city_title'] = trim(cot_import($rname, 'D', 'TXT'));
-                    $rinput['city_region'] = (int)$rid;
-                    $rinput['city_country'] = $region->region_country;
+                    $rinput['title'] = trim(cot_import($rname, 'D', 'TXT'));
+                    $rinput['region'] = (int)$rid;
+                    $rinput['country'] = $region->country;
                     $db->insert($db_rec_city, $rinput);
-                    cot_message("City Added: '{$rinput['city_title']}'");
+                    cot_message("City Added: '{$rinput['title']}'");
                 }
             }
 
@@ -137,8 +138,8 @@ class CityController{
         $cid = cot_import('cid', 'G', 'INT');
         $city = regioncity_model_City::getById($cid);
 
-        $rid = $city->city_region;
-        $title = $city->city_title;
+        $rid = $city->region;
+        $title = $city->title;
 
         $city->delete();
 
@@ -161,20 +162,22 @@ class CityController{
 
         $rnames = cot_import('rname', 'P', 'ARR');
         $rregions = cot_import('rregion', 'P', 'ARR');
+        $rsorts = cot_import('rsort', 'P', 'ARR');
 
         $cnt = 0;
         foreach ($rnames as $cid => $rname){
 
             $rinput = array();
-            $rinput['city_title'] = cot_import($rname, 'D', 'TXT');
-            $rinput['city_region'] = cot_import($rregions[$cid], 'D', 'INT');
-            if(!empty($rinput['city_title'])){
-                $cnt += $db->update($db_rec_city, $rinput, "city_id=".(int)$cid);
+            $rinput['title'] = cot_import($rname, 'D', 'TXT');
+            $rinput['region'] = cot_import($rregions[$cid], 'D', 'INT');
+            $rinput['sort'] = cot_import($rsorts[$cid], 'D', 'INT');
+            if(!empty($rinput['title'])){
+                $cnt += $db->update($db_rec_city, $rinput, "id=".(int)$cid);
             }else{
 
             }
         }
-        if($cnt > 0) cot_message("Updated ");
+        if($cnt > 0) cot_message(cot::$L['Saved']);
 
         $cache && $cache->clear();
         cot_redirect(cot_url('admin', "m=other&p=regioncity&n=city&rid={$rid}&d={$d_url}", '', true));

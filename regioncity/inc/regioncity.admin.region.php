@@ -24,14 +24,14 @@ class RegionController{
 
         $admintitle = $adminsubtitle  = $L['rec_regions'].' ('.$cot_countries[$country].')';
 
-        $cond = array(array('region_country', $country));
+        $cond = array(array('country', $country));
 
         list($pn, $d, $d_url) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 
         $totalitems = regioncity_model_Region::count($cond);
         $pagenav = cot_pagenav('admin', "m=other&p=regioncity&n=region&country=" . $country, $d, $totalitems, $cfg['maxrowsperpage']);
 
-        $regions = regioncity_model_Region::find($cond, $cfg['maxrowsperpage'], $d, 'region_title ASC');
+        $regions = regioncity_model_Region::find($cond, $cfg['maxrowsperpage'], $d, 'title ASC');
 
         $t = new XTemplate(cot_tplfile('regioncity.admin.region', 'plug', true));
         $cnt = 0;
@@ -39,9 +39,9 @@ class RegionController{
             foreach($regions as $item){
                 $cnt++;
                 $t->assign(array(
-                    "REGION_ROW_NAME" => cot_inputbox('text', 'rname[' . $item->region_id . ']', $item->region_title),
-                    "REGION_ROW_URL" => cot_url('admin', 'm=other&p=regioncity&n=city&rid=' . $item->region_id),
-                    "REGION_ROW_DEL_URL" => cot_confirm_url(cot_url('admin', 'm=other&p=regioncity&n=region&country=' . $country . '&a=del&rid=' . $item->region_id), 'regioncity'),
+                    "REGION_ROW_NAME" => cot_inputbox('text', 'rname[' . $item->id . ']', $item->title),
+                    "REGION_ROW_URL" => cot_url('admin', 'm=other&p=regioncity&n=city&rid=' . $item->id),
+                    "REGION_ROW_DEL_URL" => cot_confirm_url(cot_url('admin', 'm=other&p=regioncity&n=region&country=' . $country . '&a=del&rid=' . $item->id), 'regioncity'),
                     "REGION_ROW_NUM" => $cnt,
                     "REGION_ROW_ODDEVEN" => cot_build_oddeven($cnt)
                 ));
@@ -94,8 +94,8 @@ class RegionController{
 
         if(!cot_error_found()){
             $region = new regioncity_model_Region();
-            $region->region_title = $title;
-            $region->region_country = $country;
+            $region->title = $title;
+            $region->country = $country;
             $region->save();
 
             $cache && $cache->clear();
@@ -116,14 +116,14 @@ class RegionController{
         $rid = cot_import('rid', 'G', 'INT');
 
         $region = regioncity_model_Region::getById($rid);
-        if(empty($country)) $country = $region->region_country;
+        if(empty($country)) $country = $region->country;
 
-        $db->delete($db_rec_region, "region_id=" . (int)$rid);
-        $db->delete($db_rec_city, "city_region=" . (int)$rid);
+        $db->delete($db_rec_region, "id=" . (int)$rid);
+        $db->delete($db_rec_city, "region=" . (int)$rid);
 
         $cache && $cache->clear();
 
-        cot_message("Deleted '{$region->region_title}'");
+        cot_message("Deleted '{$region->title}'");
 
         cot_redirect(cot_url('admin', 'm=other&p=regioncity&n=region&country=' . $country . '&d=' . $d_url, '', true));
         exit;
@@ -141,9 +141,9 @@ class RegionController{
         $cnt = 0;
         foreach ($rnames as $rid => $rname){
             $rinput = array();
-            $rinput['region_title'] = cot_import($rname, 'D', 'TXT');
-            if (!empty($rinput['region_title'])){
-                $cnt += $db->update($db_rec_region, $rinput, "region_id=" . (int)$rid);
+            $rinput['title'] = cot_import($rname, 'D', 'TXT');
+            if (!empty($rinput['title'])){
+                $cnt += $db->update($db_rec_region, $rinput, "id=" . (int)$rid);
 
             }
             else

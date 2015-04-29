@@ -13,20 +13,19 @@ defined('COT_CODE') or die('Wrong URL.');
  * @method static regioncity_model_City fetchOne($conditions = array(), $order = '');
  * @method static regioncity_model_City[] find($conditions = array(), $limit = 0, $offset = 0, $order = '');
  *
- * @property int $city_id;
- * @property string $city_country
- * @property string $city_region
- * @property string $city_title
- *
+ * @property int $id;
+ * @property string $country
+ * @property string $region
+ * @property string $title
+ * @property int $sort          Поле для сортировки
  */
 class regioncity_model_City extends Som_Model_Abstract{
 
 
     /** @var Som_Model_Mapper_Abstract $db */
     protected static $_db = null;
-    protected static $_columns = null;
     protected static $_tbname = '';
-    protected static $_primary_key = 'city_id';
+    protected static $_primary_key = 'id';
 
     public $owner = array();
 
@@ -54,8 +53,8 @@ class regioncity_model_City extends Som_Model_Abstract{
             return $_stCache[$key];
         }
 
-        $q = "SELECT city_id, city_title FROM ".static::$_db->quoteIdentifier(static::$_tbname)."
-            WHERE `city_region`=? ORDER BY `city_title` ASC";
+        $q = "SELECT id, title FROM ".static::$_db->quoteIdentifier(static::$_tbname)."
+            WHERE `region`=? ORDER BY `sort` DESC, `title` ASC";
         $sql = static::$_db->query($q, array($region));
 
         $_stCache[$key] = $sql->fetchAll(PDO::FETCH_KEY_PAIR);
@@ -66,32 +65,33 @@ class regioncity_model_City extends Som_Model_Abstract{
     public static function fieldList()
     {
         return array(
-            'city_id' =>
+            'id' =>
                 array(
-                    'name' => 'city_id',
                     'type' => 'int',
                     'primary' => true,
                 ),
-            'city_country' =>
+            'country' =>
                 array(
-                    'name' => 'city_id',
                     'type' => 'varchar',
                     'length' => 3,
                     'nullable' => false,
                 ),
-            'city_region' =>
+            'region' =>
                 array(
-                    'name' => 'city_region',
                     'type' => 'int',
                     'nullable' => false,
                 ),
-            'city_title' =>
+            'title' =>
                 array(
-                    'name' => 'city_title',
                     'type' => 'varchar',
                     'length' => 255,
                     'nullable' => false,
                 ),
+            'sort' => array (
+                'type' => 'int',
+                'default' => 0,
+                'description' => 'Порядок для сортировки',
+            ),
         );
     }
 

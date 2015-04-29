@@ -1,22 +1,23 @@
 CREATE TABLE IF NOT EXISTS `cot_region` (
-  `region_id` int(11) unsigned NOT NULL auto_increment,
-  `region_country` varchar(3) collate utf8_unicode_ci NOT NULL,
-  `region_title` varchar(255) collate utf8_unicode_ci default NULL,
-  PRIMARY KEY  (`region_id`),
-  KEY `region_country` (`region_country`)
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `country` varchar(3) collate utf8_unicode_ci NOT NULL,
+  `title` varchar(255) collate utf8_unicode_ci default NULL,
+  PRIMARY KEY  (`id`),
+  KEY `country_idx` (`country`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `cot_city` (
-  `city_id` int(11) unsigned NOT NULL auto_increment,
-  `city_country` varchar(3) collate utf8_unicode_ci NOT NULL,
-  `city_region` int(11) unsigned NOT NULL default '0',
-  `city_title` varchar(255) collate utf8_unicode_ci default NULL,
-  PRIMARY KEY  (`city_id`),
-  KEY `city_region` (`city_region`)
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `country` varchar(3) collate utf8_unicode_ci NOT NULL,
+  `region` int(11) unsigned NOT NULL default '0',
+  `sort` int(11) unsigned DEFAULT '0',
+  `title` varchar(255) collate utf8_unicode_ci default NULL,
+  PRIMARY KEY  (`id`),
+  KEY `region_idx` (`region`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
-INSERT INTO `cot_city` (`city_id`, `city_country`, `city_region`, `city_title`) VALUES
+INSERT INTO `cot_city` (`id`, `country`, `region`, `title`) VALUES
 (4400,	'ru',	4312,	'Москва'),
 (4313,	'ru',	4312,	'Абрамцево'),
 (4314,	'ru',	4312,	'Алабино'),
@@ -10985,7 +10986,7 @@ INSERT INTO `cot_city` (`city_id`, `city_country`, `city_region`, `city_title`) 
 (11362,	'jp',	11354,	'Ямагучи'),
 (11364,	'jp',	11363,	'Кофу');
 
-INSERT INTO `cot_region` (`region_id`, `region_country`, `region_title`) VALUES
+INSERT INTO `cot_region` (`id`, `country`, `title`) VALUES
 (4312,	'ru',	'Москва и Московская обл.'),
 (4925,	'ru',	'Санкт-Петербург и область'),
 (1998532,	'ru',	'Адыгея'),

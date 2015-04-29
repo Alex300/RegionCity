@@ -13,17 +13,16 @@ defined('COT_CODE') or die('Wrong URL.');
  * @method static regioncity_model_Region fetchOne($conditions = array(), $order = '');
  * @method static regioncity_model_Region[] find($conditions = array(), $limit = 0, $offset = 0, $order = '');
  *
- * @property int $region_id;
- * @property string $region_country
- * @property string $region_title
+ * @property int $id;
+ * @property string $country
+ * @property string $title
  */
 class regioncity_model_Region extends Som_Model_Abstract{
 
     /** @var Som_Model_Mapper_Abstract $db */
     protected static $_db = null;
-    protected static $_columns = null;
     protected static $_tbname = '';
-    protected static $_primary_key = 'region_id';
+    protected static $_primary_key = 'id';
 
     public $owner = array();
 
@@ -51,8 +50,8 @@ class regioncity_model_Region extends Som_Model_Abstract{
             return $_stCache[$key];
         }
 
-        $q = "SELECT region_id, region_title FROM ".static::$_db->quoteIdentifier(static::$_tbname)."
-            WHERE `region_country`=? ORDER BY `region_title` ASC";
+        $q = "SELECT id, title FROM ".static::$_db->quoteIdentifier(static::$_tbname)."
+            WHERE `country`=? ORDER BY `title` ASC";
         $sql = static::$_db->query($q, array($country));
 
         $_stCache[$key] = $sql->fetchAll(PDO::FETCH_KEY_PAIR);
@@ -63,22 +62,19 @@ class regioncity_model_Region extends Som_Model_Abstract{
     public static function fieldList()
     {
         return array(
-            'region_id' =>
+            'id' =>
                 array(
-                    'name' => 'region_id',
                     'type' => 'int',
                     'primary' => true,
                 ),
-            'region_country' =>
+            'country' =>
                 array(
-                    'name' => 'region_country',
                     'type' => 'varchar',
                     'length' => 3,
                     'nullable' => false,
                 ),
-            'region_title' =>
+            'title' =>
                 array(
-                    'name' => 'region_title',
                     'type' => 'varchar',
                     'length' => 255,
                     'nullable' => false,

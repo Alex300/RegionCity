@@ -174,9 +174,9 @@ function rec_select2_city($name, $chosen = 0, $add_empty = true, $attrs = array(
 
         foreach ($chosen as $city) {
             if ($city instanceof regioncity_model_City) {
-                $vrValues[$city->city_id] = $city->city_title;
-                $chosenNames[] = $city->city_title;
-                $chosenVal[] = $city->city_id;
+                $vrValues[$city->id] = $city->title;
+                $chosenNames[] = $city->title;
+                $chosenVal[] = $city->id;
 
             } elseif (is_int($city) || ctype_digit($city)) {
                 $ids[] = $city;
@@ -184,12 +184,12 @@ function rec_select2_city($name, $chosen = 0, $add_empty = true, $attrs = array(
         }
 
         if(!empty($ids)) {
-            $tmp = regioncity_model_City::find(array(array('city_id', $ids)), 0, 0, array(array('city_title', 'asc')));
+            $tmp = regioncity_model_City::find(array(array('id', $ids)), 0, 0, array(array('sort', 'desc'), array('title', 'asc')));
             if($tmp) {
                 foreach ($tmp as $city) {
-                    $vrValues[$city->city_id] = $city->city_title;
-                    $chosenNames[] = $city->city_title;
-                    $chosenVal[] = $city->city_id;
+                    $vrValues[$city->id] = $city->title;
+                    $chosenNames[] = $city->title;
+                    $chosenVal[] = $city->id;
                 }
             }
         }
@@ -202,9 +202,9 @@ function rec_select2_city($name, $chosen = 0, $add_empty = true, $attrs = array(
         }
 
         if ($chosen instanceof regioncity_model_City) {
-            $vrValues[$chosen->city_id] = $chosen->city_title;
-            $chosenName = $chosen->city_title;
-            $chosenVal = $chosen->city_id;
+            $vrValues[$chosen->id] = $chosen->title;
+            $chosenName = $chosen->title;
+            $chosenVal = $chosen->id;
         }
     }
 
