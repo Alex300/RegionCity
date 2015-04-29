@@ -12,7 +12,7 @@
 			<tr>
 				<td class="coltop width60">{PHP.L.Title}</td>
                 <td class="coltop"></td>
-                <td class="coltop"></td>
+                <td class="coltop">{PHP.L.Order}</td>
 				<td class="coltop width20">{PHP.L.Action}</td>
 			</tr>
 			<!-- BEGIN: ROWS -->
