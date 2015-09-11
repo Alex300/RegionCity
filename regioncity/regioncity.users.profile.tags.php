@@ -16,17 +16,17 @@ defined('COT_CODE') or die('Wrong URL.');
 require_once cot_incfile('regioncity', 'plug');
 require_once cot_langfile('regioncity', 'plug');
 
-$rec_uRegFlds = explode(',', $cfg['plugin']['regioncity']['user_region']);
-$rec_uCityFlds = explode(',', $cfg['plugin']['regioncity']['user_city']);
+$rec_uRegFlds = explode(',',  cot::$cfg['plugin']['regioncity']['user_region']);
+$rec_uCityFlds = explode(',', cot::$cfg['plugin']['regioncity']['user_city']);
 
 foreach ($rec_uRegFlds as $key => $val){
     $rec_uRegFlds[$key] = trim($rec_uRegFlds[$key]);
-    if (!isset($cot_extrafields['cot_users'][$val])) unset($rec_uRegFlds[$key]);
+    if (!isset($cot_extrafields[cot::$db->users][$val])) unset($rec_uRegFlds[$key]);
 }
 
 foreach ($rec_uCityFlds as $key => $val){
     $rec_uCityFlds[$key] = trim($rec_uCityFlds[$key]);
-    if (!isset($cot_extrafields['cot_users'][$val])) unset($rec_uCityFlds[$key]);
+    if (!isset($cot_extrafields[cot::$db->users][$val])) unset($rec_uCityFlds[$key]);
 }
 
 $uPrefix = 'USERS_PROFILE_';
