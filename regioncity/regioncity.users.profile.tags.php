@@ -47,9 +47,6 @@ foreach ($rec_uCouFlds as $key => $val) {
         }
     }
 
-    var_dump_("user_{$rec_uCouFlds[$key]}", "user_{$rec_uRegFlds[$key]}", "user_{$rec_uCityFlds[$key]}");
-    var_dump_($urr["user_{$rec_uCouFlds[$key]}"], $urr["user_{$rec_uRegFlds[$key]}"], $urr["user_{$rec_uCityFlds[$key]}"]);
-
     $t->assign(rec_select_location(
             array($countryFldName, $uPrefix . strtoupper($rec_uCouFlds[$key])),
             array("ruser{$rec_uRegFlds[$key]}", $uPrefix . strtoupper($rec_uRegFlds[$key])),
