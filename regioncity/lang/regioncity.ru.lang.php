@@ -8,10 +8,6 @@
  */
 defined('COT_CODE') or die('Wrong URL.');
 
-// Plugin configuration
-
-$L['cfg_countriesfilter'] = array('Отображать страны', 'Коды через запятую, пустое значение - без фильтра стран');
-
 $L['rec_addcountry'] = 'Добавить страну';
 $L['rec_countries'] = 'Страны';
 $L['rec_nocountries'] = 'Список стран пуст';
@@ -33,3 +29,21 @@ $L['select_city'] = 'Выберите город';
 
 $L['rec_click_to_select'] = 'Кликните для выбора';
 $L['rec_please_select'] = 'Пожалуйста выберите';
+
+/**
+ * Plugin configuration
+ */
+$L['cfg_countriesfilter'] = array('Отображать страны', 'Коды через запятую, пустое значение - без фильтра стран');
+$L['cfg_user_country'] = 'Поля пользователя «Страна»';
+$L['cfg_user_country_hint'] = 'Через запятую';
+$L['cfg_user_region'] = 'Поля пользователя «Регион»';
+$L['cfg_user_region_hint'] = 'Через запятую';
+$L['cfg_user_city'] = 'Поля пользователя «Город»';
+$L['cfg_user_city_hint'] = 'Через запятую';
+
+$L['cfg_page_country'] = 'Поля страниц «Страна»';
+$L['cfg_page_country_hint'] = 'Через запятую';
+$L['cfg_page_region'] = 'Поля страниц «Регион»';
+$L['cfg_page_region_hint'] = 'Через запятую';
+$L['cfg_page_city'] = 'Поля страниц «Город»';
+$L['cfg_page_city_hint'] = 'Через запятую';
