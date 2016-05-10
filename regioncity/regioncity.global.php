@@ -9,8 +9,9 @@ Hooks=global
  * Region City plugin for Cotonti
  *
  * @package Region City
- * @author esclkm, Yusupov, Alex
- * @copyright Portal30 2013 http://portal30.ru
+ *
+ * @author Yusupov, esclkm, Kalnov Alexey - Studio Portal30
+ * @copyright 2013-2016 Portal30 Studio http://portal30.ru
  */
 defined('COT_CODE') or die('Wrong URL.');
 

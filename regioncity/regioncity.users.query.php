@@ -7,9 +7,11 @@ Hooks=users.query
 /**
  * Region City plugin for Cotonti
  *  Фильтры списка пользователей по городам
+ * 
  * @package Region City
- * @author Alex - Studio Portal30
- * @copyright Portal30 2013 http://portal30.ru
+ *
+ * @author Kalnov Alexey    <kalnovalexey@yandex.ru>
+ * @copyright © Portal30 Studio http://portal30.ru
  */
 defined('COT_CODE') or die('Wrong URL');
 

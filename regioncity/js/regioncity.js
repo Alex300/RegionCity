@@ -2,13 +2,11 @@
  * Region City plugin for Cotonti
  *
  * @package Region City
- * @author Alex - Studio Portal30
- * @copyright Portal30 2013 http://portal30.ru
+ *
+ * @author Kalnov Alexey    <kalnovalexey@yandex.ru>
+ * @copyright © Portal30 Studio http://portal30.ru
  */
-
-
 (function( $ ){
-
     var methods = {
         init : function( options ) {
             'use strict';

@@ -3,11 +3,11 @@
 [BEGIN_COT_EXT]
 Code=regioncity
 Name=Region City
-Description=Редактор/Селектор стран, регионов, городов
-Version=1.0.4
-Date=29 September 2015
-Author=Yusupov, esclkm, Alex
-Copyright=2013-2015 Portal30 http://portal30.ru
+Description=Selector / Editor countries, regions, cities
+Version=1.0.5
+Date=11 May 2016
+Author=Yusupov, esclkm, Kalnov Alexey
+Copyright=2013-2016 Portal30 Studio http://portal30.ru
 Notes=
 Auth_guests=R
 Lock_guests=W12345A
@@ -30,7 +30,7 @@ page_city=30:string:::Page city fields
  * Region City plugin for Cotonti
  *
  * @package Region City
- * @author Yusupov, esclkm, Alex - Studio Portal30
- * @copyright Portal30 2013-2015 http://portal30.ru
+ * @author Yusupov, esclkm, Kalnov Alexey - Studio Portal30
+ * @copyright 2013-2016 Portal30 Studio http://portal30.ru
  */
 defined('COT_CODE') or die('Wrong URL.');

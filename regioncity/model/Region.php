@@ -6,8 +6,9 @@ defined('COT_CODE') or die('Wrong URL.');
  *
  * @package Region City
  * @subpackage Region
- * @author Alex - Studio Portal30
- * @copyright Portal30 http://portal30.ru
+ *
+ * @author Kalnov Alexey    <kalnovalexey@yandex.ru>
+ * @copyright © Portal30 Studio http://portal30.ru
  *
  * @method static regioncity_model_Region getById($pk);
  * @method static regioncity_model_Region fetchOne($conditions = array(), $order = '');
@@ -17,7 +18,8 @@ defined('COT_CODE') or die('Wrong URL.');
  * @property string $country
  * @property string $title
  */
-class regioncity_model_Region extends Som_Model_Abstract{
+class regioncity_model_Region extends Som_Model_ActiveRecord
+{
 
     /** @var Som_Model_Mapper_Abstract $db */
     protected static $_db = null;
