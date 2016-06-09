@@ -31,6 +31,11 @@ $L['select_city'] = 'Выберите город';
 $L['rec_click_to_select'] = 'Кликните для выбора';
 $L['rec_please_select'] = 'Пожалуйста выберите';
 
+$L['rec_city'] = 'Город';
+$L['rec_region'] = 'Регион';
+$L['rec_sort'] = 'Порядок для сортировки';
+$L['rec_title'] = 'Название';
+
 /**
  * Plugin configuration
  */

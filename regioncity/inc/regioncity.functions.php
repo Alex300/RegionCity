@@ -9,8 +9,10 @@
  */
 defined('COT_CODE') or die('Wrong URL.');
 
-$db_rec_region = (isset($db_rec_region)) ? $db_rec_region : $db_x . 'region';
-$db_rec_city = (isset($db_rec_city)) ? $db_rec_city : $db_x . 'city';
+cot::$db->registerTable('region');
+cot::$db->registerTable('city');
+//$db_rec_region = (isset($db_rec_region)) ? $db_rec_region : $db_x . 'region';
+//$db_rec_city = (isset($db_rec_city)) ? $db_rec_city : $db_x . 'city';
 
 require_once cot_incfile('forms');
 

@@ -109,24 +109,41 @@ class RegionController{
 
 
     public function delAction(){
-        global $db, $db_rec_region, $db_rec_city, $cache, $cfg;
-
-        list($pn, $d, $d_url) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
+        list($pn, $d, $d_url) = cot_import_pagenav('d', cot::$cfg['maxrowsperpage']);
 
         $country = cot_import('country', 'G', 'TXT');
         $rid = cot_import('rid', 'G', 'INT');
 
+        $redirUrlParams = array(
+            'm' => 'other',
+            'p' => 'regioncity',
+            'n' => 'region',
+            'd' => $d_url,
+        );
+        
+        if(!empty($country)) $redirUrlParams['country'] = $country;
+        if(!empty($d_url))   $redirUrlParams['d'] = $d_url;
+        
         $region = regioncity_model_Region::getById($rid);
-        if(empty($country)) $country = $region->country;
+        if(!$region) {
+            cot_error("Region id# {$rid} not found");
+            cot_redirect(cot_url('admin', $redirUrlParams, '', true));
+        }
+        
+        if(empty($country)) {
+            $country = $region->country;
+            $redirUrlParams['country'] = $country;
+        }
 
-        $db->delete($db_rec_region, "id=" . (int)$rid);
-        $db->delete($db_rec_city, "region=" . (int)$rid);
+        $title = $region->title;
 
-        $cache && $cache->clear();
+        $region->delete();
 
-        cot_message("Deleted '{$region->title}'");
+        cot::$cache && cot::$cache->clear();
 
-        cot_redirect(cot_url('admin', 'm=other&p=regioncity&n=region&country=' . $country . '&d=' . $d_url, '', true));
+        cot_message("Deleted '{$title}'");
+
+        cot_redirect(cot_url('admin', $redirUrlParams, '', true));
         exit;
     }
 

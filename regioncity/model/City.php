@@ -1,13 +1,17 @@
 <?php
 defined('COT_CODE') or die('Wrong URL.');
 
+if(empty($GLOBALS['db_city'])) {
+    cot::$db->registerTable('city');
+}
+
 /**
  * Model class for the City
  *
  * @package Region City
  * @subpackage City
  *
- * @author Kalnov Alexey    <kalnovalexey@yandex.ru>
+ * @author Kalnov Alexey <kalnovalexey@yandex.ru>
  * @copyright © Portal30 Studio http://portal30.ru
  *
  * @method static regioncity_model_City getById($pk);
@@ -16,28 +20,24 @@ defined('COT_CODE') or die('Wrong URL.');
  *
  * @property int $id;
  * @property string $country
- * @property string $region
+ * @property regioncity_model_Region $region
  * @property string $title
  * @property int $sort          Поле для сортировки
  */
 class regioncity_model_City extends Som_Model_ActiveRecord
 {
 
-
     /** @var Som_Model_Mapper_Abstract $db */
     protected static $_db = null;
     protected static $_tbname = '';
     protected static $_primary_key = 'id';
 
-    public $owner = array();
-
     /**
      * Static constructor
+     * @param string $db Data base connection config name
      */
     public static function __init($db = 'db'){
-        global $db_rec_city;
-
-        static::$_tbname = $db_rec_city;
+        static::$_tbname = cot::$db->city;
         parent::__init($db);
     }
 
@@ -75,24 +75,32 @@ class regioncity_model_City extends Som_Model_ActiveRecord
             'country' =>
                 array(
                     'type' => 'varchar',
+                    'description' => cot::$L['Country'],
                     'length' => 3,
                     'nullable' => false,
                 ),
             'region' =>
                 array(
-                    'type' => 'int',
+                    'type' => 'link',
+                    'description' => cot::$L['rec_region'],
                     'nullable' => false,
+                    'link' =>
+                        array(
+                            'model' => 'regioncity_model_Region',
+                            'relation' => Som::TO_ONE,
+                            'label' => 'title',
+                        ),
                 ),
             'title' =>
                 array(
                     'type' => 'varchar',
-                    'length' => 255,
+                    'description' => cot::$L['rec_title'],
                     'nullable' => false,
                 ),
             'sort' => array (
                 'type' => 'int',
                 'default' => 0,
-                'description' => 'Порядок для сортировки',
+                'description' => cot::$L['rec_sort'],
             ),
         );
     }

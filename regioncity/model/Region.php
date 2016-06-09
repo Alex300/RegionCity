@@ -1,13 +1,17 @@
 <?php
 defined('COT_CODE') or die('Wrong URL.');
 
+if(empty($GLOBALS['db_region'])) {
+    cot::$db->registerTable('region');
+}
+
 /**
  * Model class for the Region
  *
  * @package Region City
  * @subpackage Region
  *
- * @author Kalnov Alexey    <kalnovalexey@yandex.ru>
+ * @author Kalnov Alexey <kalnovalexey@yandex.ru>
  * @copyright © Portal30 Studio http://portal30.ru
  *
  * @method static regioncity_model_Region getById($pk);
@@ -20,21 +24,17 @@ defined('COT_CODE') or die('Wrong URL.');
  */
 class regioncity_model_Region extends Som_Model_ActiveRecord
 {
-
     /** @var Som_Model_Mapper_Abstract $db */
     protected static $_db = null;
     protected static $_tbname = '';
     protected static $_primary_key = 'id';
 
-    public $owner = array();
-
     /**
      * Static constructor
+     * @param string $db Data base connection config name
      */
     public static function __init($db = 'db'){
-        global $db_rec_region;
-
-        static::$_tbname = $db_rec_region;
+        static::$_tbname = cot::$db->region;
         parent::__init($db);
     }
 
@@ -59,6 +59,20 @@ class regioncity_model_Region extends Som_Model_ActiveRecord
         $_stCache[$key] = $sql->fetchAll(PDO::FETCH_KEY_PAIR);
 
         return $_stCache[$key];
+    }
+
+    protected function beforeDelete()
+    {
+        // Удалить все города этого региона
+        $items = regioncity_model_City::find(array(
+            array('region', $this->_data['id'])
+        ));
+        if(!empty($items)){
+            foreach($items as $itemRow){
+                $itemRow->delete();
+            }
+        }        
+        return parent::beforeDelete();
     }
 
     public static function fieldList()

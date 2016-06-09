@@ -4,8 +4,8 @@
 Code=regioncity
 Name=Region City
 Description=Selector / Editor countries, regions, cities
-Version=1.0.5
-Date=11 May 2016
+Version=1.0.6
+Date=2016-06-10
 Author=Yusupov, esclkm, Kalnov Alexey
 Copyright=2013-2016 Portal30 Studio http://portal30.ru
 Notes=
