@@ -47,7 +47,7 @@ if (file_exists(cot_incfile('regioncity', 'plug', 'admin.'.$n))) {
     }
     // todo дописать как вывод для плагинов
     if (isset($content)){
-        $plugin_body .= $content;
+        $pluginBody .= $content;
     }
 
 }else{

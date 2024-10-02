@@ -4,10 +4,10 @@
 Code=regioncity
 Name=Region City
 Description=Selector / Editor countries, regions, cities
-Version=1.0.7
-Date=Sep 2, 2021
-Author=Yusupov, esclkm, Kalnov Alexey    <kalnovalexey@yandex.ru>
-Copyright=2013-2021 Lily Software https://lily-software.com (ex. Portal30 Studio)
+Version=1.0.8
+Date=2024-10-02
+Author=Yusupov, esclkm, Alexey Kalnov https://github.com/Alex300
+Copyright=2013-2021 Lily Software https://lily-software.com
 Notes=
 Auth_guests=R
 Lock_guests=W12345A
@@ -30,7 +30,7 @@ page_city=30:string:::Page city fields
  * Region City plugin for Cotonti
  *
  * @package Region City
- * @author Yusupov, esclkm, Kalnov Alexey    <kalnovalexey@yandex.ru>
- * @copyright 2013-2021 Lily Software https://lily-software.com (ex. Portal30 Studio)
+ * @author Yusupov, esclkm, Alexey Kalnov <kalnovalexey@yandex.ru>
+ * @copyright 2013-2024 Lily Software https://lily-software.com
  */
 defined('COT_CODE') or die('Wrong URL.');

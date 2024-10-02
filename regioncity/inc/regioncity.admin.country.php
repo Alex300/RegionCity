@@ -7,19 +7,19 @@ defined('COT_CODE') or die('Wrong URL');
  * @package Region City
  * @subpackage Country
  *
- * @author Kalnov Alexey    <kalnovalexey@yandex.ru>
- * @copyright © Portal30 Studio http://portal30.ru
+ * @author Kalnov Alexey <kalnovalexey@yandex.ru>
+ * @copyright © Lily Software https://lily-software.com
  */
-class CountryController{
-
+class CountryController
+{
     /**
      * Main (index) Action.
      */
     public function indexAction(){
-        global $adminpath, $admintitle, $adminsubtitle, $cot_countries, $L;
+        global $adminPath, $adminTitle, $adminSubtitle, $cot_countries, $L;
 
-        $adminpath[] = $L['rec_countries'];
-        $admintitle = $adminsubtitle  = $L['rec_countries'];
+        $adminPath[] = $L['rec_countries'];
+        $adminTitle = $adminSubtitle  = $L['rec_countries'];
 
         $t = new XTemplate(cot_tplfile('regioncity.admin.country', 'plug', true));
         $cnt = 0;

@@ -7,23 +7,23 @@ defined('COT_CODE') or die('Wrong URL');
  * @package Region City
  * @subpackage Region
  *
- * @author Kalnov Alexey    <kalnovalexey@yandex.ru>
- * @copyright © Portal30 Studio http://portal30.ru
+ * @author Kalnov Alexey <kalnovalexey@yandex.ru>
+ * @copyright © Lily Software https://lily-software.com
  */
-class RegionController{
-
+class RegionController
+{
     /**
      * Main (index) Action.
      */
     public function indexAction(){
-        global $adminpath, $admintitle, $adminsubtitle, $cot_countries, $L, $cfg;
+        global $adminPath, $adminTitle, $adminSubtitle, $cot_countries, $L, $cfg;
 
         $country = cot_import('country', 'G', 'TXT');
 
-        $adminpath[] = array(cot_url('admin', 'm=other&p=regioncity'), $L['rec_countries'] );
-        $adminpath[] = $cot_countries[$country];
+        $adminPath[] = array(cot_url('admin', 'm=other&p=regioncity'), $L['rec_countries'] );
+        $adminPath[] = $cot_countries[$country];
 
-        $admintitle = $adminsubtitle  = $L['rec_regions'].' ('.$cot_countries[$country].')';
+        $adminTitle = $adminSubtitle  = $L['rec_regions'].' ('.$cot_countries[$country].')';
 
         $cond = array(array('country', $country));
 

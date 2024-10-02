@@ -7,20 +7,20 @@ defined('COT_CODE') or die('Wrong URL');
  * @package Region City
  * @subpackage City
  * 
- * @author Kalnov Alexey    <kalnovalexey@yandex.ru>
- * @copyright © Portal30 Studio http://portal30.ru
+ * @author Kalnov Alexey <kalnovalexey@yandex.ru>
+ * @copyright © Lily Software https://lily-software.com
  */
-class CityController{
-
+class CityController
+{
     /**
      * Main (index) Action.
      */
     public function indexAction(){
-        global $adminpath, $admintitle, $adminsubtitle, $cot_countries, $L, $cfg;
+        global $adminPath, $adminTitle, $adminSubtitle, $cot_countries, $L, $cfg;
 
         $country = cot_import('country', 'G', 'TXT');
 
-        $adminpath[] = array(cot_url('admin', 'm=other&p=regioncity'), $L['rec_countries'] );
+        $adminPath[] = array(cot_url('admin', 'm=other&p=regioncity'), $L['rec_countries'] );
 
         $rid = cot_import('rid', 'G', 'INT');
 
@@ -29,21 +29,21 @@ class CityController{
             cot_error('Region not found');
         }
 
-        $adminpath[] = array(cot_url('admin', "m=other&p=regioncity&n=region&country={$region->country}"), $cot_countries[$region->country] );
-        $adminpath[] = $region->title;
+        $adminPath[] = array(cot_url('admin', "m=other&p=regioncity&n=region&country={$region->country}"), $cot_countries[$region->country] );
+        $adminPath[] = $region->title;
 
         $country = $region->country;
 
-        $admintitle = $adminsubtitle  = $region->title.' ('.$cot_countries[$country].')';
+        $adminTitle = $adminSubtitle  = $region->title . ' (' . $cot_countries[$country] . ')';
 
         $cond = array(array('region', $rid));
 
-        list($pn, $d, $d_url) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
+        list($pn, $d, $d_url) = cot_import_pagenav('d', Cot::$cfg['maxrowsperpage']);
 
         $totalitems = regioncity_model_City::count($cond);
-        $pagenav = cot_pagenav('admin', "m=other&p=regioncity&n=city&rid=" . $rid, $d, $totalitems, $cfg['maxrowsperpage']);
+        $pagenav = cot_pagenav('admin', "m=other&p=regioncity&n=city&rid=" . $rid, $d, $totalitems, Cot::$cfg['maxrowsperpage']);
 
-        $cities = regioncity_model_City::find($cond, $cfg['maxrowsperpage'], $d, array(array('sort', 'DESC'), array('title', 'ASC')));
+        $cities = regioncity_model_City::find($cond, Cot::$cfg['maxrowsperpage'], $d, array(array('sort', 'DESC'), array('title', 'ASC')));
         $regionsArr = regioncity_model_Region::getKeyValPairsByCountry($region->country);
 
 
